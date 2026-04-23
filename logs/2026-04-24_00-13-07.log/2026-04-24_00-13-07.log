@@ -1,0 +1,5 @@
+[2026-04-24 00:13:15,738] 9 root INFO - Starting the application
+[2026-04-24 00:13:16,039] 15 root INFO - LLM Model initialized successfully
+[2026-04-24 00:13:16,476] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 404 Not Found"
+[2026-04-24 00:13:16,479] 26 root ERROR - Error in generating response
+[2026-04-24 00:13:16,479] 16 root ERROR - Error occurred in file: D:\Python\Genrative AI\Generative AI Hackathan\Students AI Assistance\sources\Model\model.py at line number: 22 with error message: Error code: 404 - {'error': {'message': 'The model `llama3.1-8b-instant` does not exist or you do not have access to it.', 'type': 'invalid_request_error', 'code': 'model_not_found'}}
