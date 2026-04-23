@@ -8,7 +8,7 @@ def main():
     try:
         logging.info("Starting the application")
         model = LLM_Model()
-        prompt = "Tell me about the history of artificial intelligence"
+        prompt = "create a quiz for python subject with 10 questions and when I completed plesae give me feedback about quiz results"
         response = model.generate_response(prompt)
         print(response.content)
 

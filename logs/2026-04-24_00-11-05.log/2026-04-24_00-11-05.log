@@ -1,5 +1,0 @@
-[2026-04-24 00:11:13,522] 9 root INFO - Starting the application
-[2026-04-24 00:11:13,751] 14 root INFO - LLM Model initialized successfully
-[2026-04-24 00:11:14,191] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 404 Not Found"
-[2026-04-24 00:11:14,193] 25 root ERROR - Error in generating response
-[2026-04-24 00:11:14,193] 16 root ERROR - name 'sys' is not defined

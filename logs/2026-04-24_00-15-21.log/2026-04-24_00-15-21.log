@@ -1,4 +1,0 @@
-[2026-04-24 00:15:30,837] 9 root INFO - Starting the application
-[2026-04-24 00:15:31,185] 15 root INFO - LLM Model initialized successfully
-[2026-04-24 00:15:33,699] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
-[2026-04-24 00:15:33,820] 23 root INFO - Response generated successfully
