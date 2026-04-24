@@ -1,21 +1,33 @@
 from sources.logger import logging
 from sources.exception import CustomException
+from sources.utils import calculate_score, get_weak_topics
 import sys
 
 logging.info("Analytics agent initialized successfully")
 
+
 def analytics_agent(state):
     try:
         logging.info("Analytics agent called")
-        attempts = state["quiz_attempts"]
 
-        total = len(attempts)
-        correct = sum(1 for a in attempts if a["correct"])
+        # -------------------------
+        # Safe access
+        # -------------------------
+        attempts = state.get("quiz_attempts", [])
 
-        score = (correct / total) * 100 if total > 0 else 0
+        # -------------------------
+        # Calculate score
+        # -------------------------
+        score = calculate_score(attempts)
 
-        weak_topics = [a["topic"] for a in attempts if not a["correct"]]
+        # -------------------------
+        # Get weak topics
+        # -------------------------
+        weak_topics = get_weak_topics(attempts)
 
+        # -------------------------
+        # Feedback
+        # -------------------------
         feedback = f"""
         Your Score: {score:.2f}%
 
@@ -23,18 +35,19 @@ def analytics_agent(state):
         - Good understanding of correct answers
 
         Weak Areas:
-        - {set(weak_topics)}
+        - {list(set(weak_topics)) if weak_topics else "None"}
 
         Recommendation:
         Practice weak topics and retry quiz.
         """
 
+        logging.info("Analytics agent completed successfully")
+
         return {
             "score": score,
-            "feedback": feedback
+            "feedback": feedback,
+            "weak_topic": weak_topics[0] if weak_topics else "None"
         }
-
-        logging.info("Analytics agent completed successfully")
 
     except Exception as e:
         logging.error("Error in analytics agent")

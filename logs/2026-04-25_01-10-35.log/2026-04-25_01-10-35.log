@@ -1,0 +1,27 @@
+[2026-04-25 01:10:42,383] 15 root INFO - LLM Model initialized successfully
+[2026-04-25 01:10:42,383] 9 root INFO - Intent agent initialized successfully
+[2026-04-25 01:10:42,384] 5 root INFO - Gap agent initialized successfully
+[2026-04-25 01:10:42,429] 15 root INFO - LLM Model initialized successfully
+[2026-04-25 01:10:42,429] 10 root INFO - Planner agent initialized successfully
+[2026-04-25 01:10:42,472] 15 root INFO - LLM Model initialized successfully
+[2026-04-25 01:10:42,472] 9 root INFO - Tutor agent initialized successfully
+[2026-04-25 01:10:42,520] 15 root INFO - LLM Model initialized successfully
+[2026-04-25 01:10:42,520] 8 root INFO - Assessment agent initialized successfully
+[2026-04-25 01:10:42,521] 6 root INFO - Analytics agent initialized successfully
+[2026-04-25 01:10:55,625] 14 root INFO - Intent agent called
+[2026-04-25 01:11:38,461] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-25 01:11:38,550] 23 root INFO - Response generated successfully
+[2026-04-25 01:11:38,553] 65 root INFO - Intent agent completed successfully
+[2026-04-25 01:11:38,561] 9 root INFO - Gap agent called
+[2026-04-25 01:11:38,565] 14 root INFO - Planner agent called
+[2026-04-25 01:12:21,914] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-25 01:12:21,921] 23 root INFO - Response generated successfully
+[2026-04-25 01:12:21,922] 45 root INFO - Planner agent completed successfully
+[2026-04-25 01:12:21,927] 13 root INFO - Tutor agent called
+[2026-04-25 01:13:06,449] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-25 01:13:06,454] 23 root INFO - Response generated successfully
+[2026-04-25 01:13:06,457] 23 root INFO - Tutor agent completed successfully
+[2026-04-25 01:13:06,461] 13 root INFO - Assessment agent called
+[2026-04-25 01:13:50,293] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-25 01:13:50,299] 23 root INFO - Response generated successfully
+[2026-04-25 01:13:50,299] 59 root INFO - Assessment agent completed successfully
