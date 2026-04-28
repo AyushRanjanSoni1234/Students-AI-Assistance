@@ -11,7 +11,7 @@ logging.info("Tutor agent initialized successfully")
 def tutor_agent(state):
     try:
         logging.info("Tutor agent called")
-        topic = state["weak_topic"]
+        topic = state.get("weak_topic") or state.get("topics", [state["subject"]])[0]
         subject = state["subject"]
 
         prompt = f"""

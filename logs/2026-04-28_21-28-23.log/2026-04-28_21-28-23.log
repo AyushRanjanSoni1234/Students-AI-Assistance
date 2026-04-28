@@ -1,0 +1,44 @@
+[2026-04-28 21:28:30,138] 15 root INFO - LLM Model initialized successfully
+[2026-04-28 21:28:30,138] 9 root INFO - Intent agent initialized successfully
+[2026-04-28 21:28:30,182] 15 root INFO - LLM Model initialized successfully
+[2026-04-28 21:28:30,182] 10 root INFO - Planner agent initialized successfully
+[2026-04-28 21:28:30,247] 15 root INFO - LLM Model initialized successfully
+[2026-04-28 21:28:30,247] 9 root INFO - Tutor agent initialized successfully
+[2026-04-28 21:28:30,288] 15 root INFO - LLM Model initialized successfully
+[2026-04-28 21:28:30,288] 9 root INFO - Quiz agent initialized successfully
+[2026-04-28 21:28:30,288] 5 root INFO - Assessment agent initialized successfully
+[2026-04-28 21:28:30,291] 6 root INFO - Analytics agent initialized successfully
+[2026-04-28 21:28:30,292] 5 root INFO - Gap agent initialized successfully
+[2026-04-28 21:28:30,292] 36 root INFO - Agents workflow created successfully
+[2026-04-28 21:28:30,317] 111 root INFO - Agents workflow compiled successfully
+[2026-04-28 21:28:30,322] 32 root INFO - \u2705 Request Schemas initialized
+[2026-04-28 21:28:49,812] 41 root INFO - \U0001f4e5 /generate | mode=learn | input=Explain about reproduction in biology.
+[2026-04-28 21:28:49,827] 14 root INFO - Intent agent called
+[2026-04-28 21:28:50,452] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-28 21:28:50,479] 23 root INFO - Response generated successfully
+[2026-04-28 21:28:50,479] 80 root INFO - Intent agent completed successfully
+[2026-04-28 21:28:50,479] 14 root INFO - Planner agent called
+[2026-04-28 21:28:51,301] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-28 21:28:51,303] 23 root INFO - Response generated successfully
+[2026-04-28 21:28:51,303] 48 root INFO - Planner agent completed successfully
+[2026-04-28 21:28:51,304] 13 root INFO - Tutor agent called
+[2026-04-28 21:28:52,414] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-28 21:28:52,414] 23 root INFO - Response generated successfully
+[2026-04-28 21:28:52,414] 23 root INFO - Tutor agent completed successfully
+[2026-04-28 21:29:02,287] 41 root INFO - \U0001f4e5 /generate | mode=quiz_generate | input=Explain about reproduction in biology.
+[2026-04-28 21:29:02,289] 14 root INFO - Intent agent called
+[2026-04-28 21:29:02,895] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-28 21:29:02,896] 23 root INFO - Response generated successfully
+[2026-04-28 21:29:02,896] 80 root INFO - Intent agent completed successfully
+[2026-04-28 21:29:03,747] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-28 21:29:03,747] 23 root INFO - Response generated successfully
+[2026-04-28 21:29:09,024] 89 root INFO - \U0001f4e5 /submit called
+[2026-04-28 21:29:09,024] 14 root INFO - Intent agent called
+[2026-04-28 21:29:09,600] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-28 21:29:09,600] 23 root INFO - Response generated successfully
+[2026-04-28 21:29:09,600] 80 root INFO - Intent agent completed successfully
+[2026-04-28 21:29:09,604] 9 root INFO - Gap agent called
+[2026-04-28 21:29:09,604] 13 root INFO - Tutor agent called
+[2026-04-28 21:29:10,679] 1025 httpx INFO - HTTP Request: POST https://api.groq.com/openai/v1/chat/completions "HTTP/1.1 200 OK"
+[2026-04-28 21:29:10,681] 23 root INFO - Response generated successfully
+[2026-04-28 21:29:10,681] 23 root INFO - Tutor agent completed successfully

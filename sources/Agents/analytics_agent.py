@@ -5,49 +5,31 @@ import sys
 
 logging.info("Analytics agent initialized successfully")
 
-
 def analytics_agent(state):
     try:
-        logging.info("Analytics agent called")
-
-        # -------------------------
-        # Safe access
-        # -------------------------
         attempts = state.get("quiz_attempts", [])
 
-        # -------------------------
-        # Calculate score
-        # -------------------------
         score = calculate_score(attempts)
-
-        # -------------------------
-        # Get weak topics
-        # -------------------------
         weak_topics = get_weak_topics(attempts)
 
-        # -------------------------
-        # Feedback
-        # -------------------------
         feedback = f"""
-        Your Score: {score:.2f}%
+        Score: {score:.2f}%
 
-        Strengths:
-        - Good understanding of correct answers
+        Weak Topics: {weak_topics if weak_topics else "None"}
 
-        Weak Areas:
-        - {list(set(weak_topics)) if weak_topics else "None"}
-
-        Recommendation:
-        Practice weak topics and retry quiz.
+        Next Step:
+        - Revise weak topics
+        - Practice again
         """
 
-        logging.info("Analytics agent completed successfully")
-
         return {
+            **state,
             "score": score,
             "feedback": feedback,
             "weak_topic": weak_topics[0] if weak_topics else "None"
         }
+
+        logging.info("Analytics agent completed successfully")
 
     except Exception as e:
         logging.error("Error in analytics agent")

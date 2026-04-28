@@ -19,55 +19,71 @@ def intent_agent(state):
         # Prompt
         # -------------------------
         prompt = f"""
-        You are an AI system that extracts structured data.
+        You are an Intent Detection Agent.
 
-        Input: "{user_input}"
+        Your task is to analyze user input and extract structured information.
 
+        Input:
+        "{user_input}"
+
+        ----------------------
+        Instructions:
+        ----------------------
+        1. Identify user intent:
+        - "learn" → user wants to study or understand something
+        - "quiz" → user wants questions or test
+
+        2. Extract subject exactly as mentioned.
+
+        3. Extract:
+        - num_questions → ONLY if intent = "quiz"
+        - difficulty → if mentioned, else default = "medium"
+
+        4. Defaults:
+        - intent → "learn" if unclear
+        - subject → "general"
+        - num_questions → 5 (only for quiz)
+        - level → "medium"
+
+        ----------------------
         Rules:
-        - Identify intent: "quiz" or "learn"
-        - Extract subject exactly as mentioned
-        - Extract number of questions (default = 5 if not mentioned)
+        ----------------------
+        - Do NOT guess missing information unnecessarily
+        - Do NOT add extra text
+        - Return ONLY valid JSON
+        - No explanations
 
-        Return ONLY JSON:
+        ----------------------
+        Output Format:
+        ----------------------
         {{
-            "intent": "...",
-            "subject": "...",
-            "num_questions": ...
+        "intent": "learn" or "quiz",
+        "subject": "string",
+        "num_questions": number,
+        "level": "easy" or "medium" or "hard" or "beginner" or "intermediate" or "advanced"
         }}
         """
-
-        # -------------------------
-        # LLM Call
-        # -------------------------
-        raw_output = llm.generate_response(prompt).content
-
-        # -------------------------
-        # Clean + Extract JSON
-        # -------------------------
-        cleaned = clean_text(raw_output)
+        raw = llm.generate_response(prompt).content
+        cleaned = clean_text(raw)
         extracted = extract_json(cleaned)
-
-        # -------------------------
-        # Safe fallback
-        # -------------------------
-        if not extracted:
-            logging.warning("Intent extraction failed, using defaults")
-            return {
-                "intent": "quiz",
-                "subject": "general",
-                "num_questions": 5
-            }
-
-        intent = extracted.get("intent", "quiz")
-        subject = extracted.get("subject", "general")
-        num_q = extracted.get("num_questions", 5)
+    
+        intent = (extracted or {}).get("intent", "learn")
+        subject = (extracted or {}).get("subject", "general")
+        
+        if intent == "quiz":
+            num_q = (extracted or {}).get("num_questions", 5)
+            level = (extracted or {}).get("level", "medium")
+        elif intent == "learn":
+            num_q = None 
+            level = (extracted or {}).get("level", "medium")
 
         logging.info("Intent agent completed successfully")
 
         return {
             "intent": intent,
             "subject": subject,
-            "num_questions": num_q
+            "num_questions": num_q,
+            "level": level
         }
 
     except Exception as e:

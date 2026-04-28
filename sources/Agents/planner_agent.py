@@ -16,6 +16,9 @@ def planner_agent(state):
         weak_topic = state.get("weak_topic", "")
         level = state.get("level", "beginner")
 
+        if not subject and not weak_topic:
+            return {"topics": []}
+
         prompt = f"""
         You are an AI curriculum planner.
 

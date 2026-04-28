@@ -15,7 +15,7 @@ st.set_page_config(
 st.title("🧠 Students AI Assistance")
 
 # -------------------------
-# Initialize Session State
+# Session State
 # -------------------------
 if "quiz" not in st.session_state:
     st.session_state.quiz = None
@@ -23,136 +23,227 @@ if "quiz" not in st.session_state:
 if "input" not in st.session_state:
     st.session_state.input = ""
 
+if "answers" not in st.session_state:
+    st.session_state.answers = []
+
+if "submitted" not in st.session_state:
+    st.session_state.submitted = False
+
+if "explanation" not in st.session_state:
+    st.session_state.explanation = None
+
+
 # -------------------------
-# Step 1: User Input
+# User Input
 # -------------------------
 st.subheader("🎯 What do you want to learn?")
 
 user_input = st.text_input(
     "Enter your request",
-    placeholder="e.g. Create a quiz for Python with 10 questions"
+    placeholder="e.g. Learn Python basics OR Create quiz for Python"
 )
 
-# -------------------------
-# Generate Quiz
-# -------------------------
-if st.button("Generate Quiz"):
-    if not user_input:
-        st.warning("Please enter something!")
-    else:
-        with st.spinner("Generating quiz..."):
-            try:
-                res = requests.post(
-                    f"{API_URL}/generate",
-                    json={"input": user_input}
-                )
-
-                data = res.json()
-
-                # -------------------------
-                # Fix: Ensure quiz is list
-                # -------------------------
-                quiz_data = data.get("quiz", [])
-
-                if isinstance(quiz_data, str):
-                    try:
-                        quiz_data = json.loads(quiz_data)
-                    except:
-                        quiz_data = []
-
-                st.session_state.quiz = quiz_data
-                st.session_state.input = user_input
-
-            except Exception as e:
-                st.error(f"Error: {e}")
+col1, col2 = st.columns(2)
 
 # -------------------------
-# Step 2: Show Quiz
+# 🧠 LEARN BUTTON
+# -------------------------
+with col1:
+    if st.button("🧠 Learn Topic"):
+
+        # reset quiz
+        st.session_state.quiz = None
+        st.session_state.answers = []
+        st.session_state.submitted = False
+
+        if not user_input:
+            st.warning("Please enter something!")
+        else:
+            with st.spinner("Generating explanation..."):
+                try:
+                    res = requests.post(
+                        f"{API_URL}/generate",
+                        json={
+                            "input": user_input,
+                            "mode": "learn"
+                        },
+                        timeout=30
+                    )
+
+                    if res.status_code != 200:
+                        st.error("Server error")
+                        st.stop()
+
+                    data = res.json()
+
+                    if "error" in data:
+                        st.error(data["error"])
+                        st.stop()
+
+                    st.session_state.explanation = data.get("explanation")
+
+                except Exception as e:
+                    st.error(f"Error: {e}")
+
+
+# -------------------------
+# 📝 QUIZ BUTTON
+# -------------------------
+with col2:
+    if st.button("📝 Generate Quiz"):
+
+        st.session_state.explanation = None
+        st.session_state.quiz = None
+        st.session_state.answers = []
+        st.session_state.submitted = False
+
+        if not user_input:
+            st.warning("Please enter something!")
+        else:
+            with st.spinner("Generating quiz..."):
+                try:
+                    res = requests.post(
+                        f"{API_URL}/generate",
+                        json={
+                            "input": user_input,
+                            "mode": "quiz_generate"
+                        },
+                        timeout=30
+                    )
+
+                    if res.status_code != 200:
+                        st.error("Server error")
+                        st.stop()
+
+                    data = res.json()
+
+                    if "error" in data:
+                        st.error(data["error"])
+                        st.stop()
+
+                    quiz_data = data.get("quiz", [])
+
+                    # handle string case
+                    if isinstance(quiz_data, str):
+                        try:
+                            quiz_data = json.loads(quiz_data)
+                        except:
+                            quiz_data = []
+
+                    if not quiz_data:
+                        st.error("No quiz generated")
+                    else:
+                        st.session_state.quiz = quiz_data
+                        st.session_state.input = user_input
+                        st.session_state.answers = [None] * len(quiz_data)
+
+                except Exception as e:
+                    st.error(f"Error: {e}")
+
+
+# -------------------------
+# 🧠 SHOW EXPLANATION
+# -------------------------
+if st.session_state.explanation:
+    st.subheader("📚 Explanation")
+    st.write(st.session_state.explanation)
+
+
+# -------------------------
+# 📝 SHOW QUIZ
 # -------------------------
 if st.session_state.quiz:
 
-    # Show user input
     st.markdown("### 📝 Your Request")
     st.info(st.session_state.input)
 
     st.subheader("📘 Quiz")
 
-    answers = []
-
     for i, q in enumerate(st.session_state.quiz):
-
-        # -------------------------
-        # Safety Check
-        # -------------------------
-        if not isinstance(q, dict):
-            st.error("Invalid quiz format")
-            continue
 
         st.markdown(f"**Q{i+1}. {q.get('question', '')}**")
 
         options = q.get("options", [])
 
-        if options:
-            ans = st.radio(
-                "Choose your answer:",
-                options,
-                key=f"q_{i}"
-            )
-            answers.append(ans)
-        else:
-            st.error("No options available")
+        selected = st.radio(
+            "Choose your answer:",
+            options,
+            key=f"q_{i}"
+        )
 
-# -------------------------
-# Step 3: Submit Quiz
-# -------------------------
+        st.session_state.answers[i] = selected
+
+
+    # -------------------------
+    # Submit Quiz
+    # -------------------------
     if st.button("Submit Quiz"):
 
-        # Check all answered
-        if len(answers) != len(st.session_state.quiz):
+        if None in st.session_state.answers:
             st.warning("Please answer all questions!")
         else:
-            with st.spinner("Evaluating your answers..."):
-
-                attempts = []
-
-                for i, q in enumerate(st.session_state.quiz):
-                    attempts.append({
-                        "topic": q.get("topic", "general"),
-                        "correct": answers[i] == q.get("answer")
-                    })
-
+            with st.spinner("Evaluating..."):
                 try:
                     res = requests.post(
                         f"{API_URL}/submit",
                         json={
                             "input": st.session_state.input,
-                            "quiz_attempts": attempts
-                        }
+                            "quiz": st.session_state.quiz,
+                            "user_answers": st.session_state.answers
+                        },
+                        timeout=30
                     )
+
+                    if res.status_code != 200:
+                        st.error("Server error")
+                        st.stop()
 
                     result = res.json()
 
-                    # -------------------------
-                    # Show Results
-                    # -------------------------
+                    if "error" in result:
+                        st.error(result["error"])
+                        st.stop()
+
+                    st.session_state.submitted = True
+
+                    # Results
                     st.subheader("📊 Results")
 
-                    score = result.get("score", 0)
-
-                    try:
-                        score = float(score)
-                        st.success(f"Score: {score:.2f}%")
-                    except:
-                        st.warning("Score not available")
+                    score = float(result.get("score", 0))
+                    st.success(f"Score: {score:.2f}%")
 
                     st.markdown("### 📝 Feedback")
-                    st.write(result.get("feedback", ""))
+                    st.write(result.get("feedback"))
 
                     st.markdown("### ⚠️ Weak Topic")
-                    st.write(result.get("weak_topic", ""))
+                    st.write(result.get("weak_topic"))
 
                     st.markdown("### 📚 Explanation")
-                    st.write(result.get("explanation", ""))
+                    st.write(result.get("explanation"))
 
                 except Exception as e:
                     st.error(f"Error: {e}")
+
+
+# -------------------------
+# Correct Answers
+# -------------------------
+if st.session_state.quiz and st.session_state.submitted:
+
+    st.markdown("### ✅ Correct Answers")
+
+    for i, q in enumerate(st.session_state.quiz):
+        correct = q.get("answer")
+        user_ans = st.session_state.answers[i]
+
+        if user_ans == correct:
+            st.success(f"Q{i+1}: Correct ✅")
+        else:
+            st.error(f"Q{i+1}: Wrong ❌ (Correct: {correct})")
+
+
+# -------------------------
+# Reset
+# -------------------------
+if st.button("🔄 Reset"):
+    st.session_state.clear()
